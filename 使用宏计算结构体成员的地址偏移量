@@ -1,0 +1,1 @@
+#define OFFSET_MEMBER(TYPE, MEMBER) ((unsigned long)(&(((TYPE *)0)->MEMBER)))
