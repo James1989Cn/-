@@ -1,0 +1,30 @@
+通过以下代码可以获取给定16位数的各个数位
+
+// 十进制
+void GetNumberDigit1(Uint16 digit[5], Uint16 number)
+{
+    Uint16 tmp;
+
+    tmp = (Uint32)number * 52429 >> 19; // 52428.8 = 1/10*2^19
+    digit[0] = number - tmp * 10;
+    number = tmp;
+    
+    tmp = (Uint32)number * 52429 >> 19;
+    digit[1] = number - tmp * 10;
+    number = tmp;
+
+    tmp = (Uint32)number * 52429 >> 19;
+    digit[2] = number - tmp * 10;
+    number = tmp;
+
+    tmp = (Uint32)number * 52429 >> 19;
+    digit[3] = number - tmp * 10;
+    number = tmp;
+
+    tmp = (Uint32)number * 52429 >> 19;
+    digit[4] = number - tmp * 10;
+    number = tmp;
+}
+
+这里使用 乘法和移位替代 除法操作，加快了运算速度。
+52429 是可以保证乘法结果不会超过32位数 且相对误差最小的整数
