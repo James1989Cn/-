@@ -1,0 +1,53 @@
+unsigned char Trg;
+
+unsigned char Cont;
+
+void KeyRead( void )
+
+{
+unsigned char ReadData = PINB^0xff;     //1
+
+Trg  = ReadData & (ReadData ^ Cont);   //2
+
+Cont = ReadData;                                //3
+
+}
+
+完了。有没有一种不可思议的感觉？不管你现在是什么感觉，我当时是看蒙了，呵呵。。。
+
+当然，没有想懂之前会那样，想懂之后就会惊叹于这算法的精妙！！
+
+下面是程序解释:
+
+Trg(triger)代表的是触发，Cont(continue)代表的是连续按下。
+
+语句1:读 PORTB的端口数据，取反，然后送到 ReadData 临时变量里面保存起来。
+
+语句2:算法 1，用来计算触发变量的。一个位与操作，一个异或操作，我想学过 C语言都应该懂吧？Trg为全局变量，其它程序可以直接引用。
+
+语句3:算法 2，用来计算连续变量。
+
+那么，怎么判断按键释放呢？
+
+很简单，Trg 和 Cont 都为 0 则肯定已经释放了。在这个基础上再增加一个按键释放检测功能，
+
+程序如下：
+
+volatile unsigned char Trg;
+
+volatile unsigned char Cont;
+
+volatile unsigned char Release;
+
+void KeyRead( void )
+
+{
+unsigned char ReadData = PINB^0xff;      // 1  读键值
+
+Trg = ReadData & (ReadData ^ Cont);      // 2  得到按下触发值
+
+Release=  (ReadData ^ Trg ^ Cont);       // 3  得到释放触发值
+
+Cont = ReadData;                         // 4  得到所有未释放的键值
+
+}
